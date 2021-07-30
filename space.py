@@ -11,16 +11,16 @@ class Alien(Sprite):
         self.screen = screen
         self.game_req = game_req
 
-        self.image = pygame.image.load(r"C:\Users\jayendra\AppData\Local\Programs\Python\Python39\pyProjects\space_wars\images\1c4ea9a14de5e9eebb04387d1e9f54ec-removebg-preview.png")
+        self.image = pygame.image.load(r"url")
         self.image = pygame.transform.scale(self.image , (50, 50)) 
         self.rect = self.image.get_rect()
 
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
 
-        self.x = float(self.rect.x)
+        self.x = loat(self.rect.x)
 
-    def check_edges(self):
+    def check_edgs(self):
         screen_rect = self.screen.get_rect()
 
         if self.rect.right >= screen_rect.right:
@@ -34,7 +34,7 @@ class Alien(Sprite):
         self.rect.x = self.x
 
     def blitme(self):
-        self.screen.blit(self.image , self.rect)
+        self.scren.blit(self.image , self.rect)
 
 def check_fleet(game_req ,aliens):
     for alien in aliens.sprites():
@@ -53,7 +53,7 @@ class Bullet(Sprite):
 
     def __init__(self , game_req , screen , ship):
         super(Bullet , self).__init__()
-        self.screen = screen
+        self.sceen = screen
 
         #rect bullet formation
         self.rect = pygame.Rect(0,0,game_req.bullet_width,game_req.bullet_height)
@@ -76,18 +76,19 @@ class Bullet(Sprite):
 
 class ship_struct(Sprite):
     def __init__(self , screen , game_req):
-        super(ship_struct, self).__init__()
+        super(shp_struct, self).__init__()
+
         self.screen = screen
         self.game_req = game_req
 
         self.move_right = False
         self.move_left = False
 
-        self.image = pygame.image.load(r"C:\Users\jayendra\AppData\Local\Programs\Python\Python39\pyProjects\space_wars\images\istockphoto-1128766183-612x612-removebg-preview.png")
+        self.image = pygame.image.load(r"url")
         self.image = pygame.transform.scale(self.image , (100, 100)) 
         self.rect = self.image.get_rect()
 
-        self.screen_dim = screen.get_rect()
+        self.screen_dim = scren.get_rect()
         
 
 
@@ -96,7 +97,7 @@ class ship_struct(Sprite):
 
         
 
-        #print(self.rect.bottom)
+        print(self.rect.bottom)
 
     def update(self ):
         # game ship boundary initialisation
@@ -227,7 +228,7 @@ def get_row(game_req , ship_height , alien_height):
 def create_fleet(game_req , screen , aliens , ship):
     alien = Alien(game_req , screen)
     alien_width = alien.rect.width
-    space_x = game_req.width - 2*(alien_width)
+    space_x = game_req - 2*(alien_width)
     alien_num = int(space_x / (2*alien_width))
 
     row_num = get_row(game_req , ship.rect.height , alien.rect.height)
@@ -244,7 +245,7 @@ def create_fleet(game_req , screen , aliens , ship):
 
 def game_updation( game_req , game , ship , bullets , aliens ,stats , play, scores ):
     game.fill(game_req.bg_col)
-    for bullets in bullets.sprites():
+    for bullets in bulets.sprites():
         bullets.drawbull()
     ship.blitme()
 
@@ -258,7 +259,7 @@ def game_updation( game_req , game , ship , bullets , aliens ,stats , play, scor
 
     pygame.display.flip() #earises old changes and gives new changes every time
 
-def update_aliens(game_req , aliens , ship , stats , game , bullets , scores):
+def update_aliens(ga_req , aliens , ship , stats , game , bullets , scores):
     check_fleet(game_req ,aliens)
     aliens.update()
 
@@ -274,7 +275,7 @@ def update_bullets(game_req , game , bullets , aliens , ship  , scores , stats )
     bullets.update()
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
-            bullets.remove(bullet)
+            bullets.rmove(bullet)
 
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
@@ -298,7 +299,7 @@ class score:
     def __init__(self , game_req , screen , stats):
         self.screen =screen
         self.screen_rect = screen.get_rect()
-        self.game_req = game_req
+        sef.game_req = game_req
         self.stats = stats
 
         self.text_color = (245, 239, 66)
@@ -324,7 +325,7 @@ class score:
 
         self.level_rect = self.level_image.get_rect()
         self.level_rect.right = self.score_rect.right
-        self.level_rect.top = self.score_rect.bottom + 10
+        self.level_rect.top = self.score_re.bottom + 10
 
     def prep_high_score(self):
         high_score = int(round(self.stats.high_score, -1))
@@ -341,14 +342,14 @@ class score:
         self.score_image = self.font.render(score_str, True, self.text_color,self.game_req.bg_col)
         
         self.score_rect = self.score_image.get_rect()
-        self.score_rect.right = self.screen_rect.right - 20
+        self.score_rect.right = self.right - 20
         self.score_rect.top = 20
 
     def show_score(self):
         self.screen.blit(self.score_image, self.score_rect)
 
         self.screen.blit(self.high_score_image, self.high_score_rect)
-        self.screen.blit(self.level_image, self.level_rect)
+        self.screen.blit( self.level_rect)
         self.ships.draw(self.screen)
 
 
@@ -382,7 +383,6 @@ class Button:
         self.font = pygame.font.SysFont(None , 48)
 
         self.rect = pygame.Rect(0,0,self.width , self.height)
-        self.rect.center = self.screen_rect.center
 
         self.prep_msg(msg)
         self.scores = scores
@@ -458,7 +458,6 @@ def game_window():
         
         check(game_req , game , ship , bullets ,  stats , play , aliens , scores )
         if stats.active:
-            ship.update()
             update_bullets(game_req , game , bullets , aliens , ship ,scores ,stats )
             update_aliens(game_req , aliens , ship , stats , game , bullets , scores)
         game_updation( game_req , game , ship , bullets , aliens ,stats , play , scores )
